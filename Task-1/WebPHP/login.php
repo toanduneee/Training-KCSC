@@ -12,6 +12,7 @@
         $password = $_POST['password'];
 
         $sql = "SELECT * FROM acc WHERE username = '$username' AND password = '$password'";
+        // Với `admin' OR '1'='1' -- ` thì sau dấu "--" phải có dấu cách mới hoạt động được, hoặc có thể dùng "#" để thay thế và ko cần có dấu cách nữa =((((
 
         $result = mysqli_query($connect, $sql);
         if (!$result) {
