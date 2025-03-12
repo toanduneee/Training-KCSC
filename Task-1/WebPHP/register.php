@@ -15,19 +15,17 @@
 
         if (empty($username) || empty($password) || empty($confirm)) {
             $thongbao = "Vui lòng điền đầy đủ thông tin";
-        }        
-
-        $sql_name = "SELECT username FROM acc WHERE username = '$username'";
-
-        if ($confirm != $password){
+        } elseif ($confirm != $password){
             $thongbao = 'Mat khau khong khop';
         } else {
-            if($username == $sql_name) {
-                $thongbao = 'Ten nguoi dung kha dung';
+            $sql_name = "SELECT username FROM acc WHERE username = '$username'";
+            $resultname = mysqli_query($connect, $sql_name);
+            if (mysqli_num_rows($resultname) > 0){
+                $thongbao = "Username da duoc su dung";
             } else {
                 $sql = "INSERT INTO `acc` (`username`, `password`) VALUES ('$username', '$password')";
                 $result = mysqli_query($connect, $sql);
-                $thongbao = 'Dang ky thanh cong';
+                $thongbao = "<script>alert('Đăng ký thành công!');</script>";
             }
         }
     }
