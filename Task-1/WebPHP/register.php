@@ -38,17 +38,27 @@
 ?>
 
 
-<form action="register.php" method="POST">
-    <label>username</label>
-    <input type="text" name="username"> <br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+</head>
+<body>
+    <form action="register.php" method="POST">
+        <label>username</label>
+        <input type="text" name="username"> <br>
 
-    <label>password</label>
-    <input type="password" name="password"> <br>
-    
-    <label>confirm password</label>
-    <input type="password" name="confirm"> <br>
+        <label>password</label>
+        <input type="password" name="password"> <br>
+        
+        <label>confirm password</label>
+        <input type="password" name="confirm"> <br>
 
-    <button type="submit" name="dangky">Đăng ký</button>
-    <button type="submit" name="return">Trở lại đăng nhập</button> <br>
-    <?php echo $thongbao ?>
-</form>
+        <button type="submit" name="dangky">Đăng ký</button>
+        <button type="submit" name="return">Trở lại đăng nhập</button> <br>
+        <?php echo $thongbao ?>
+    </form>
+</body>
+</html>
