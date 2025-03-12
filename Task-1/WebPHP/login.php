@@ -14,6 +14,9 @@
         $sql = "SELECT * FROM acc WHERE username = '$username' AND password = '$password'";
 
         $result = mysqli_query($connect, $sql);
+        if (!$result) {
+            die("Loi: " . mysqli_error($connect));
+        }
 
         if(mysqli_num_rows($result) == 1){
             $_SESSION['username'] = $username;
