@@ -13,7 +13,17 @@
 
 
 # 2. Phân biệt Client Side với Server Side
+- Server là 1 cái máy chủ có thể tương tác với database, thực hiện chức năng lấy dữ liệu cần thiết gửi về cho client.
 
+- Client là mấy cái phần mềm trên điện thoại máy tính có thể là browser hay một phần mềm nào đấy có khả năng gửi request đến server.
+
+- Ví dụ như 1 người vào trang youtube, thì là lúc client gửi request đến phía server, server xử lý với database rồi gửi trả thông tin về cho client như các video thịnh hành, video của người dùng,...
+
+## 2.1. Server Side
+- Mọi thứ được thực hiện trên phía server, khi người dùng vào trang web thì trang web sẽ gửi đi request, phía server nhận được request thì sẽ render ra HTML, CSS hoàn chỉnh rồi gửi trả cho client, việc của client là show lên những cái mà phía server gửi đến.
+
+## 2.2. Client Side
+- Client gửi request tới server thì bên server vẫn tạo ra mấy cái file như HTML, CSS cơ bản, sau đấy server gửi về cho client. Khi này, các file như javascript ở phía client sẽ lấy dữ liệu từ bên database rồi render để show lên.
 
 
 
