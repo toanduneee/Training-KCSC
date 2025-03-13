@@ -1,9 +1,15 @@
 <?php
     session_start();
     include "connect.php";
+    mysqli_report(MYSQLI_REPORT_OFF);
 
     if(isset($_SESSION['username'])){
-        header('location: admin.php');
+        if ($_SESSION['username'] === 'admin') {
+            header('Location: admin.php');
+        } else {
+            header('Location: trangchu.php');
+        }
+        exit();
     }
 
     $echoo = "";
@@ -12,15 +18,21 @@
         $password = $_POST['password'];
 
         $sql = "SELECT * FROM acc WHERE username = '$username' AND password = '$password'";
+        echo $sql;
 
         $result = mysqli_query($connect, $sql);
         if (!$result) {
             die("Loi: " . mysqli_error($connect));
         }
+        echo "<br>So hang: " . mysqli_num_rows($result);
 
         if(mysqli_num_rows($result) == 1){
             $_SESSION['username'] = $username;
-            header('location:admin.php');
+            if ($username == 'admin') {
+                header('Location: admin.php');
+            } else {
+                header('Location: trangchu.php');
+            }
         } else {
             $echoo = "Tai khoan mat khau khong chinh xac";
         }
