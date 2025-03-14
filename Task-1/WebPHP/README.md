@@ -56,6 +56,59 @@ password: `aaaa`
 
 ---------------------------------------------------------------------------
 # Cách 2: 
+- Như đã nói ở trên thì ta cần điều kiện **số hàng trong bảng phải bằng 1** ta có thể thay `OR` thành `AND`
+=> `admin' AND '1'='1' -- `
+- Như vậy ta cũng có thể đăng nhập vào nhưng sẽ ko đến được `admin.php` mà nó sẽ chuyển hướng đến `trangchu.php` vì tên username không phải `admin`.
+- Nhưng với điều kiện này thì chắc chắn số hàng sẽ bằng 1, vậy ra tiếp tục sửa đổi phần điều kiện `'1'='1'` để tìm ra được password của `admin`.
+- Dùng `(SELECT 'a' FROM acc WHERE username = 'admin' AND LENGTH(password) > 1) = 'a'` để thay thế.
+- Giải thích: Với điều kiện `username = 'admin'` và `độ dài của pass lớn hơn 1` nếu cả 2 cùng đúng thì ký tự `'a'` sẽ được lấy ra để so sánh với `'a'`,và chắc chắn nó TRUE.
+- Vậy:
+  + username: `admin' AND (SELECT 'a' FROM acc WHERE username = 'admin' AND LENGTH(password) > 1) = 'a' -- `
+  + pass: tùy ý
+ 
+![image](https://github.com/user-attachments/assets/5ab483fa-65d0-4f44-b241-f6691c9f6b3a)
+
+- Số hàng = 1 => Đúng là username `admin` có password lớn hơn 1. Tiếp tục thử
+
+![image](https://github.com/user-attachments/assets/1e67985b-5aae-4415-80b1-47b99d02ec59)
+
+- Đến khi lớn hơn 8 thì số hàng = 0 => password này có 8 ký tự.
+- Khi đã biết số lượng ký tự rồi, chúng ta sẽ thử tìm từng chữ cái một. Ta có thể sử dụng truy vấn sau:
+- `admin' AND (SELECT SUBSTRING(password,1,1) FROM acc WHERE username = 'admin') = 'a' -- `
+- Cũng tương tự với cấu trúc `'1'='1'` trên thì ở đây kiểm tra xem ký tự đầu tiên trong password có phải là `'a'` hay không? Nếu đúng, số hàng sẽ = 1. Nếu sai, số hàng sẽ = 0, ta thay đổi ký tự `'a'` ở bên ngoài kia thành ký tự tiếp theo
+
+![image](https://github.com/user-attachments/assets/da2bd7dd-78a5-4fb3-adf2-756f96a8acb2)
+
+- Và ký tự đầu tiên đúng là `'a'`
+- Thử với ký tự thứ 2 của Password
+
+> [!NOTE]
+> Sau khi có `so hang: 1` tức là cũng có nghĩa nó đã đc chuyển hướng tới `trangchu.php`. Ta cần bấm 1 lần `login` sau đấy thì `logout` ra, nếu không kể từ sau đấy mỗi request sẽ đều bị điều hướng đến `trangchu.php` và không có được thông tin gì cả.
+
+- Gửi request đấy đến Intruder để brute force
+
+![image](https://github.com/user-attachments/assets/a8a375c9-2ca5-4060-a2b2-7fcde05b0323)
+
+- Tìm ký tự thứ 2 trong password:
+
+![image](https://github.com/user-attachments/assets/7456cb07-3218-4100-8bf2-3f26412c7796)
+
+- Tại đây ta thấy, chỗ chữ `d` thì nó bắt đầu có status 302, và xem response thì có `so hang: 1`
+=> Vậy có thể hiểu là với status 200 thì là request gửi đi sai, nên nó vẫn ở trang login và hiện thông báo sai. Còn status 302 thì là đã đúng và chuyển hướng nó đến `trangchu.php`, tức là ký tự đầu tiên nhận lỗi 302 là ký tự đúng của password, còn các lỗi 302 sau đấy là do đã chuyển hướng trang nên nó báo vậy =D.
+- Tương tự như vậy với các ký tự tiếp theo
+
+![image](https://github.com/user-attachments/assets/b54ab4b3-d19b-405e-9f17-8d79ff50b636)
+
+- Ký tự 3: m
+- Ký tự 4: i
+- Ký tự 5: n
+- Ký tự 6: 1
+- Ký tự 7: 2
+- Ký tự 8: 3
+
+=> Vậy password của `admin` là: `admin123`
+
+![image](https://github.com/user-attachments/assets/9bbe9d33-794a-4936-abc4-40ea2f3cc48e)
 
 
 
