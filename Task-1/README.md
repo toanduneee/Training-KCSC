@@ -4,14 +4,20 @@
 ### 1.1. Blind SQL Injection
 - Với loại này, khi người tấn công chèn SQL vào đâu đó để lấy dữ liệu thì sẽ không có thông tin nào về kết quả của truy vấn SQL được trả về trong respond, cũng như là không thông báo lỗi, lỗi cú pháp SQL hay lỗi không tìm thấy bảng gì hết.
 - Trong này thì gồm có dạng Boolean với dạng Time:
-  + Boolean: Sử dụng SQL để đặt câu hỏi ở dạng "Yes/No", xong trang web sẽ có sự thay đổi nhất định nào đó, mình dựa vào đấy thì có thể từ từ phán đoán ra được thông tin mình cần. Ví dụ như đợt tuyển thành viên vừa rồi thì có 1 bài ở dạng này, khi đúng tên trong database (hay flag) thì nó sẽ hiện thông báo là `Found` còn nếu sai thì là `Not Found`, rồi từ đấy dò từ từ ra các ký tự của flag.
-  + Time: Với dạng này thì là kiểu các phần thông báo lỗi hay thay đổi giao diện đều được xử lý oke rồi, nên khi mình thử với 1 truy vấn nào đấy thì có thể hoàn toàn không thấy sự thay đổi gì. Sử dụng các hàm SLEEP(), pg_sleep(),... để làm chậm đi mấy cái request mà mình nghi ngờ, kiểu mình sẽ gửi đi 1 truy vấn SQL hỏi với cái điều kiện A thì có đúng không, nếu đúng thì gửi trả lại response sau 5 giây, không đúng thì phản hồi ngay lập tức. Từ đó ta có thể phán đoán được sự đúng sai như dạng `Boolean`.
-  + Error:
-  + OAST (out-of-band)
+  + **Boolean**: Sử dụng SQL để đặt câu hỏi ở dạng "Yes/No", xong trang web sẽ có sự thay đổi nhất định nào đó, mình dựa vào đấy thì có thể từ từ phán đoán ra được thông tin mình cần. Ví dụ như đợt tuyển thành viên vừa rồi thì có 1 bài ở dạng này, khi đúng tên trong database (hay flag) thì nó sẽ hiện thông báo là `Found` còn nếu sai thì là `Not Found`, rồi từ đấy dò từ từ ra các ký tự của flag.
+  + **Time**: Với dạng này thì là kiểu các phần thông báo lỗi hay thay đổi giao diện đều được xử lý oke rồi, nên khi mình thử với 1 truy vấn nào đấy thì có thể hoàn toàn không thấy sự thay đổi gì. Sử dụng các hàm SLEEP(), pg_sleep(),... để làm chậm đi mấy cái request mà mình nghi ngờ, kiểu mình sẽ gửi đi 1 truy vấn SQL hỏi với cái điều kiện A thì có đúng không, nếu đúng thì gửi trả lại response sau 5 giây, không đúng thì phản hồi ngay lập tức. Từ đó ta có thể phán đoán được sự đúng sai như dạng `Boolean`.
 
-### 1.2. UNION
+### 1.2. UNION-Based SQLi:
+- Thường được dùng để hợp các kết quả từ nhiều bảng lại với nhau.
+- Dùng `UNION SELECT...` để gắn thêm 1 bảng mà mình muốn vào kết quả của truy vấn gốc, với điều kiện là số lượng cột phải bằng nhau.
+- Ví dụ: Có truy vấn gốc `SELECT * FROM products WHERE category = 'Gifts' AND released = 1`
+  Với việc nhập vào phần `category` thì em muốn lấy tất cả các tài khoản mật khẩu từ trang đó, thì em chèn thêm là `' UNION SELECT username, password FROM users--`
+  Khi đó truy vấn được gửi đi sẽ là `SELECT * FROM products WHERE category = 'Gifts' UNION SELECT username, password FROM users`, có nghĩa là ngoài việc lấy tất cả các sản phầm trong danh mục `Gifts` thì nó còn lấy thêm cả `username` AND `password`.
+
+### 1.3. Error-Based SQLi:
 
 
+### 1.4. Out-of-band SQLi (OAST):
 
 
 # 2. Phân biệt Client Side với Server Side
