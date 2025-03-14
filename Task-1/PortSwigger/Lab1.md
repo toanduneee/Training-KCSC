@@ -1,10 +1,11 @@
-Đầu bài cho biết:
+# Đầu bài cho biết:
 - Khi mà người dùng chọn 1 cái category thì trang web sẽ thực hiện 1 truy vấn là:
 `SELECT * FROM products WHERE category = 'Gifts' AND released = 1`
 
-Yêu cầu: Làm hiển thị sản phẩm chưa được phát hành.
+# Yêu cầu: 
+Làm hiển thị sản phẩm chưa được phát hành.
 
-Giải quyết:
+# Giải quyết:
 ![image](https://github.com/user-attachments/assets/2de27575-fc1c-4b4b-b3e8-859447217ae8)
 
 - Khi vào bài em có thấy 1 mục các danh mục như trên, em thử chọn 1 cái danh mục thì thấy phần URL thay đổi như này:
