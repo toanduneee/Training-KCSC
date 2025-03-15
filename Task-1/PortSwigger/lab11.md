@@ -22,7 +22,7 @@ Unterminated string literal started at position 52 in SQL SELECT * FROM tracking
 - '|| (SELECT password FROM users WHERE username = 'administrator') ||'
   
 Unterminated string literal started at position 95 in SQL SELECT * FROM tracking WHERE id = 'RvVJ6xRwjtKqdmER'|| (SELECT password FROM users WHERE userna'. Expected  char
-Có vẻ như chỗ này bị giới hạn số lượng từ trong truy vấn
+- Có vẻ như chỗ này bị giới hạn số lượng từ trong truy vấn
 
 - '|| (CAST(SELECT password FROM users)) ||'
 
