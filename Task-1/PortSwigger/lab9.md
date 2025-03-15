@@ -1,3 +1,18 @@
+# Đầu bài cho biết:
+- Ứng dụng có lỗ hổng Blind SQL injection trong cookie theo dõi.
+- Ứng dụng thực hiện truy vấn SQL chứa giá trị cookie.
+- Kết quả truy vấn SQL không được trả về và không có thông báo lỗi.
+- Ứng dụng hiển thị thông báo "Welcome back" nếu truy vấn trả về bất kỳ hàng nào.
+- Cơ sở dữ liệu chứa bảng users với các cột username và password.
+
+# Yêu cầu:
+- Khai thác lỗ hổng Blind SQL injection để tìm mật khẩu của người dùng administrator.
+- Đăng nhập với tư cách người dùng administrator.
+
+![image](https://github.com/user-attachments/assets/ad9f2c79-4022-478e-923d-6a28b0234952)
+
+# Solution:
+
 - Dùng Burp, kiểm tra trong header giá trị TrackId, chuyển qua Repeater để sửa TrackId đó
 - Vì giá trị trong TrackId là luôn đúng rồi nên khi thêm điều kiện để thử thì có thể kết nối bằng AND
 
@@ -25,5 +40,5 @@ Mất chữ welcome back
     SUBSTRING('Hello world', 7, 5) sẽ trả về 'world'.
 */
 
-- rồi đẩy nó vào Intruder để test từng chữ
-ppylw9n6f9kzxs5m4oo5
+- Rồi đưa nó vào Intruder để test từng chữ một
+- Được pass: ppylw9n6f9kzxs5m4oo5
