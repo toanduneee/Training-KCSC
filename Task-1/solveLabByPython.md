@@ -4,7 +4,7 @@
 - [Lab 4](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/solveLabByPython.md#lab-4)
 
 
-# LAB 1:
+# LAB 1: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data
 
 ```python
 import requests
@@ -19,7 +19,7 @@ else:
     print("Failed")
 ```
 
-# LAB 3:
+# LAB 3: SQL injection UNION attack, determining the number of columns returned by the query
 ```python
 import requests
 
@@ -50,7 +50,7 @@ else:
     print("Failed")
 ```
 
-# LAB 4:
+# LAB 4: SQL injection UNION attack, finding a column containing text
 ```python
 import requests
 
