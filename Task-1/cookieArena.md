@@ -1,7 +1,7 @@
 # Mục Lục
-- [Simple Blind SQL Injection](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1#3-blind-logger-middleware)
-- [Baby SQL Injection to RCE](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1#2-baby-sql-injection-to-rce)
-- [Blind Logger Middleware](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1#3-blind-logger-middleware)
+- [Simple Blind SQL Injection](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/cookieArena.md#1-simple-blind-sql-injection)
+- [Baby SQL Injection to RCE](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/cookieArena.md#2-baby-sql-injection-to-rce)
+- [Blind Logger Middleware](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/cookieArena.md#3-blind-logger-middleware)
 ------------
 # 1. Simple Blind SQL Injection
 
