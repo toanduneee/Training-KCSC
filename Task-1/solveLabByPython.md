@@ -1,3 +1,8 @@
+# Mục lục
+- [Lab 1](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/solveLabByPython.md#lab-1)
+- [Lab 3](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/solveLabByPython.md#lab-3)
+- [Lab 4](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/solveLabByPython.md#lab-4)
+
 
 # LAB 1:
 
