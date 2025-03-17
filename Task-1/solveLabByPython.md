@@ -3,7 +3,7 @@
 - [Lab 2](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/solveLabByPython.md#lab-2-sql-injection-vulnerability-allowing-login-bypass)
 - [Lab 3](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/solveLabByPython.md#lab-3-sql-injection-union-attack-determining-the-number-of-columns-returned-by-the-query)
 - [Lab 4](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/solveLabByPython.md#lab-4-sql-injection-union-attack-finding-a-column-containing-text)
-- [Lab 5](https://github.com/toanvunee/Training-KCSC/edit/main/Task-1/solveLabByPython.md#lab-5-sql-injection-union-attack-retrieving-data-from-other-tables)
+- [Lab 5](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/solveLabByPython.md#lab-5-sql-injection-union-attack-retrieving-data-from-other-tables)
 
 
 # LAB 1: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data
