@@ -15,7 +15,7 @@ burp_data = {
 }
 response = requests.post(burp_url, data=burp_data, headers=headers)
 
-for index in range(47, 60):
+for index in range(1, 100):
     found = False
     for c in charset:
         burp_data = {
