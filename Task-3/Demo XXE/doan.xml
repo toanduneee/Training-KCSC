@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+  <item>
+    <name>Phở Bò</name>
+    <price>45000</price>
+    <description>Phở bò tái chín thơm ngon.</description>
+  </item>
+  <item>
+    <name>Bún Chả</name>
+    <price>40000</price>
+    <description>Bún chả Hà Nội chuẩn vị.</description>
+  </item>
+  <item>
+    <name>Cơm Tấm</name>
+    <price>35000</price>
+    <description>Cơm tấm sườn bì chả.</description>
+  </item>
+</items>

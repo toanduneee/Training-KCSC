@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+  <item>
+    <name>Búa</name>
+    <price>50000</price>
+    <description>Búa đóng đinh chắc chắn.</description>
+  </item>
+  <item>
+    <name>Kìm</name>
+    <price>75000</price>
+    <description>Kìm điện đa năng.</description>
+  </item>
+  <item>
+    <name>Tua vít</name>
+    <price>30000</price>
+    <description>Bộ tua vít 4 cạnh.</description>
+  </item>
+</items>
